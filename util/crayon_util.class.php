@@ -57,8 +57,11 @@ class CrayonUtil {
             for ($i = 0; $i < count($lines); $i++) {
                 $lines[$i] = self::esc_regex($lines[$i]);
 //              if ($escape_hash || true) {
-                // If we have used \#, then we don't want it to become \\#
-                $lines[$i] = preg_replace('|\\\\\\\\#|', '\#', $lines[$i]);
+                // Update for PHP 7.3
+                // Was: // If we have used \#, then we don't want it to become \\#
+                // Was: $lines[$i] = preg_replace('|\\\\\\\\#|', '\#', $lines[$i]);
+                // If we have used \#, then we don't want it to become \\\#
+                $lines[$i] = preg_replace('|\\\\\\\\\\\\#|', '\#', $lines[$i]);
 //              }
             }
         }

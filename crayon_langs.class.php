@@ -336,8 +336,11 @@ class CrayonLang extends CrayonVersionResource {
 
 	// Override
 	function clean_id($id) {
-        $id = CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
-        return preg_replace('/[^\w-+#]/msi', '', $id);
+				$id = CrayonUtil::space_to_hyphen( strtolower(trim($id)) );
+				// Update for PHP 7.3
+				// See: https://wordpress.org/support/topic/plugin-breaks-with-php-7-3/
+				// Was: return preg_replace('/[^\w-+#]/msi', '', $id);
+				return preg_replace('/[^\w\-+#]/msi', '', $id);
 	}
 
 	function ext($ext = NULL) {
