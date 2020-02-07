@@ -1,28 +1,31 @@
 <?php
-/*
-Plugin Name: Crayon Syntax Highlighter
-Plugin URI: https://github.com/aramk/crayon-syntax-highlighter
-Description: Supports multiple languages, themes, highlighting from a URL, local file or post text.
-Version: 2.8.4
-Author: Aram Kocharyan
-Author URI: http://aramk.com/
-Text Domain: crayon-syntax-highlighter
-Domain Path: /trans/
-License: GPL2
-Copyright 2013	Aram Kocharyan	(email : akarmenia@gmail.com)
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License, version 2, as
-published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+/**
+ * Plugin Name:  Crayon Syntax Highlighter
+ * Plugin URI:   https://github.com/aramk/crayon-syntax-highlighter
+ * Description:  Supports multiple languages, themes, highlighting from a URL, local file or post text.
+ * Version:      2.8.4
+ * Requires PHP: 7.3
+ * Author:       Aram Kocharyan
+ * Author URI:   http://aramk.com/
+ * License:      GPL v2
+ * License URI:  https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Text Domain:  crayon-syntax-highlighter
+ * Domain Path:  /trans/
+ *
+ * Copyright 2013 Aram Kocharyan (email : akarmenia@gmail.com)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 2, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 require_once('global.php');
 require_once(CRAYON_HIGHLIGHTER_PHP);
 if (CRAYON_TAG_EDITOR) {
