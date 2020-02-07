@@ -3,19 +3,18 @@
 #   ELEMENT_NAME [optional-css-class] REGULAR_EXPRESSION
 
     NAME                Transact-SQL
-    VERSION             1.8.0
+    VERSION             1.8.1
 
     COMMENT             (/\*.*?\*/)|(--.*?$)
-    STRING              ((?<!\\)'.*?(?<!\\)')
-    
+    STRING              ('[^']*')
+
     KEYWORD             \b(?alt:keyword.txt)\b
-    TYPE                 \b(?alt:type.txt)\b
+    TYPE                \b(?alt:type.txt)\b
     PROCEDURE:VARIABLE  \b(?alt:procedure.txt)\b
-    SQLOP:KEYWORD        \b(?alt:operator.txt)\b
+    SQLOP:KEYWORD       \b(?alt:operator.txt)\b
 
     ENTITY              \w+\s*(?=\()
     IDENTIFIER          (?default)
     CONSTANT            (?default)
     OPERATOR            (?default)
     SYMBOL              (?default)
-
