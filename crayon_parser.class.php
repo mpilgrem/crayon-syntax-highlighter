@@ -219,7 +219,8 @@ class CrayonParser {
 
 			// Test if regex is valid
 			if (@preg_match("#$regex#", '') === FALSE) {
-				CrayonLog::syslog("The regex for the element '{$element->name()}' in '{$element->path()}' is not valid.");
+				// Was: CrayonLog::syslog("The regex for the element '{$element->name()}' in '{$element->path()}' is not valid.");
+				CrayonLog::syslog("The regex '{$regex}' for the element '{$element->name()}' in '{$element->path()}' is not valid.");
 				return FALSE;
 			}
 
