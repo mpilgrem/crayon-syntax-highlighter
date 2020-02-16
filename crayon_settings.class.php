@@ -84,8 +84,8 @@ class CrayonSettings {
     const EFFICIENT_ENQUEUE = 'efficient-enqueue';
     const CAPTURE_PRE = 'capture-pre';
     const CAPTURE_MINI_TAG = 'capture-mini-tag';
-    const MIXED = 'mixed';
-    const SHOW_MIXED = 'show_mixed';
+    const ALTERNATE = 'alternate';
+    const SHOW_ALTERNATE = 'show_alternate';
     const PLAIN_TAG = 'plain_tag';
     const SHOW_PLAIN_DEFAULT = 'show-plain-default';
     const ENQUEUE_THEMES = 'enqueque-themes';
@@ -225,8 +225,8 @@ class CrayonSettings {
             new CrayonSetting(self::EFFICIENT_ENQUEUE, FALSE),
             new CrayonSetting(self::CAPTURE_PRE, TRUE),
             new CrayonSetting(self::CAPTURE_MINI_TAG, FALSE),
-            new CrayonSetting(self::MIXED, TRUE),
-            new CrayonSetting(self::SHOW_MIXED, TRUE),
+            new CrayonSetting(self::ALTERNATE, TRUE),
+            new CrayonSetting(self::SHOW_ALTERNATE, TRUE),
             new CrayonSetting(self::PLAIN_TAG, FALSE),
             new CrayonSetting(self::ENQUEUE_THEMES, TRUE),
             new CrayonSetting(self::ENQUEUE_FONTS, TRUE),
