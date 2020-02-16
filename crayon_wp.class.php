@@ -193,7 +193,7 @@ class CrayonWP {
     }
 
     /* For manually highlighting code, useful for other PHP contexts */
-    public static function highlight($code, $add_tags = FALSE, $output_text = FALSE) {
+    public static function highlight($code, $add_tags = FALSE) {
         $captures = CrayonWP::capture_crayons(0, $code);
         $the_captures = $captures['capture'];
         if (count($the_captures) == 0 && $add_tags) {
@@ -216,22 +216,17 @@ class CrayonWP {
             $crayon_formatted = $crayon->output(TRUE, FALSE);
             $the_content = CrayonUtil::preg_replace_escape_back(self::regex_with_id($id), $crayon_formatted, $the_content, 1, $count);
         }
-
-        if ($output_text) {
-            header('Content-Type: text/plain');
-        } else {
-            header('Content-Type: text/html');
-        }
         return $the_content;
     }
 
     public static function ajax_highlight() {
+        header('Content-Type: text/plain');
         $code = isset($_POST['code']) ? $_POST['code'] : null;
         if (!$code) {
             $code = isset($_GET['code']) ? $_GET['code'] : null;
         }
         if ($code) {
-            echo self::highlight($code, FALSE, TRUE);
+            echo self::highlight($code, FALSE);
         } else {
             echo "No code specified.";
         }
