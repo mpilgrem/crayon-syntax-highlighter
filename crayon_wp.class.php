@@ -1321,11 +1321,11 @@ if (defined('ABSPATH')) {
     } else {
         // Update between versions
         CrayonWP::update();
-        // For marking a post as containing a Crayon
-        add_action('update_post', 'CrayonWP::save_post', 10, 2);
-        add_action('save_post', 'CrayonWP::save_post', 10, 2);
-        add_filter('wp_insert_post_data', 'CrayonWP::filter_post_data', '99', 2);
     }
+    // For marking a post as containing a Crayon
+    add_action('update_post', 'CrayonWP::save_post', 10, 2);
+    add_action('save_post', 'CrayonWP::save_post', 10, 2);
+    add_filter('wp_insert_post_data', 'CrayonWP::filter_post_data', '99', 2);
     register_activation_hook(__FILE__, 'CrayonWP::install');
     register_deactivation_hook(__FILE__, 'CrayonWP::uninstall');
     if (CrayonGlobalSettings::val(CrayonSettings::COMMENTS)) {
@@ -1334,5 +1334,20 @@ if (defined('ABSPATH')) {
     }
     add_filter('init', 'CrayonWP::init_ajax');
 }
+
+function register_crayon_gutenberg_block() {
+    global $CRAYON_VERSION;
+    wp_register_style('crayon-syntax-highlighter-editor',
+        plugins_url(CRAYON_SYNTAX_HIGHLIGHTER_EDITOR_CSS, __FILE__),
+        ['wp-edit-blocks'],
+        $CRAYON_VERSION
+    );
+    register_block_type(
+        'crayon-syntax-highlighter/crayon',
+        ['editor_style' => 'crayon-syntax-highlighter-editor']
+    );
+}
+
+add_action('init', 'register_crayon_gutenberg_block');
 
 ?>
