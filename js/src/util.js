@@ -78,6 +78,18 @@ var jQueryCrayon = jQuery;
             $.get(settings.ajaxurl, args, callback);
         };
 
+        /**
+         * @param {String} HTML representing any number of sibling elements
+         * @return {NodeList}
+         */
+        base.htmlToElements = function (html) {
+            return $.parseHTML(html, document, true);
+        };
+
+        base.htmlToFirstNode = function (html) {
+            return base.htmlToElements(html)[0];
+        };
+
         base.postAJAX = function (args, callback) {
             args.version = settings.version;
             $.post(settings.ajaxurl, args, callback);
