@@ -1335,4 +1335,21 @@ if (defined('ABSPATH')) {
     add_filter('init', 'CrayonWP::init_ajax');
 }
 
+function register_gutenberg_block() {
+    global $CRAYON_VERSION;
+    wp_register_style('crayon-syntax-highlighter-editor',
+        plugins_url(CRAYON_SYNTAX_HIGHLIGHTER_EDITOR_CSS, __FILE__),
+        array('wp-edit-blocks'),
+        $CRAYON_VERSION
+    ); 
+    register_block_type(
+        'crayon-syntax-highlighter/crayon-block',
+        array(
+            'editor_style' => 'crayon-syntax-highlighter-editor'
+        )
+    );
+}
+
+add_action('init', 'register_gutenberg_block');
+
 ?>
