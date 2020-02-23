@@ -220,7 +220,6 @@
             outputHTML = args.output;
             editor_name = args.editor_str;
             var currNode = args.node;
-            var currNode = args.node;
             is_inline = false;
 
             // Unbind submit
