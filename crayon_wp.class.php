@@ -1323,7 +1323,6 @@ if (defined('ABSPATH')) {
         CrayonWP::update();
     }
     // For marking a post as containing a Crayon
-    add_action('update_post', 'CrayonWP::save_post', 10, 2);
     add_action('save_post', 'CrayonWP::save_post', 10, 2);
     add_filter('wp_insert_post_data', 'CrayonWP::filter_post_data', '99', 2);
     register_activation_hook(__FILE__, 'CrayonWP::install');
