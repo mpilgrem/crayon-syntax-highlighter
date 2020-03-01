@@ -349,7 +349,6 @@
                     hide: base.hide,
                     select: null,
                     editor_str: null,
-                    ed: null,
                     node: null,
                     input: null,
                     output: null,

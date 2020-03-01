@@ -127,7 +127,6 @@
                                 return ed.selection.getContent({format: 'text'});
                             },
                             editor_str: 'tinymce',
-                            ed: ed,
                             node: currPre,
                             input: 'decode',
                             output: 'encode'
@@ -187,7 +186,6 @@
                                 return ed.selection.getContent({format: 'text'});
                             },
                             editor_str: 'tinymce',
-                            ed: ed,
                             node: currPre,
                             input: 'decode',
                             output: 'encode'
