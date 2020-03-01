@@ -40,7 +40,6 @@
                                     title: 'Crayon',
                                     onClick: function() {
                                         window.CrayonTagEditor.showDialog({
-                                            update: function(shortcode) {},
                                             br_html_block_after: '',
                                             input: 'decode',
                                             output: 'encode',
@@ -122,7 +121,6 @@
                         var inputNode = CrayonUtil.htmlToFirstNode(inputValue);
                     }
                     window.CrayonTagEditor.showDialog({
-                        update: function(shortcode) {},
                         node: inputNode,
                         input: 'decode',
                         output: 'encode',
