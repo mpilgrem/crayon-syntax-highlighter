@@ -590,14 +590,10 @@
 
     var isSlideHidden = function(object) {
       var object_neg_height = "-" + object.outerHeight() + "px";
-      if (
+      return (
         object.css("margin-top") == object_neg_height ||
         object.css("display") == "none"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+      );
     };
 
     var crayonSlide = function(
@@ -616,11 +612,7 @@
       var objectNegHeight = "-" + object.outerHeight() + "px";
 
       if (typeof show == "undefined") {
-        if (isSlideHidden(object)) {
-          show = true;
-        } else {
-          show = false;
-        }
+        show = isSlideHidden(object);
       }
       // Instant means no time delay for showing/hiding
       if (typeof animTime == "undefined") {
@@ -725,13 +717,8 @@
       hidden.fadeTo(animt(500, uid), 1, function() {
         hidden.css("z-index", 1);
         // Give focus to plain code
-        if (hidden == plain) {
-          if (select) {
-            plain.select();
-          } else {
-            // XXX not needed
-            // plain.focus();
-          }
+        if (hidden == plain && select) {
+          plain.select();
         }
 
         // Refresh scrollbar draw
