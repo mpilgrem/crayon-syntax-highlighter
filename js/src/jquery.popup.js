@@ -1,5 +1,11 @@
+/* global jQueryCrayon
+*/
+
+/* exported popdownWindow, popupWindow
+*/
+
 // Default Settings
-jqueryPopup = Object();
+var jqueryPopup = Object();
 jqueryPopup.defaultSettings = {
   // center window over browser window? {1 (YES) or 0 (NO)}. overrides top and
   // left
@@ -39,6 +45,9 @@ jqueryPopup.defaultSettings = {
   event: "click"
 };
 
+var popdownWindow;
+var popupWindow;
+
 (function($) {
   popupWindow = function(
     object,
@@ -51,17 +60,17 @@ jqueryPopup.defaultSettings = {
     afterCallback = typeof afterCallback !== "undefined" ? afterCallback : null;
 
     if (typeof object == "string") {
-      object = jQuery(object);
+      object = $(object);
     }
-    if (!(object instanceof jQuery)) {
+    if (!(object instanceof $)) {
       return false;
     }
-    var settings = jQuery.extend(
+    var settings = $.extend(
       {},
       jqueryPopup.defaultSettings,
       instanceSettings || {}
     );
-    object.handler = jQuery(object).bind(settings.event, function() {
+    object.handler = $(object).bind(settings.event, function() {
       if (beforeCallback) {
         beforeCallback();
       }
@@ -84,10 +93,10 @@ jqueryPopup.defaultSettings = {
         ",menuBar=" +
         settings.menubar;
 
-      settings.windowName = settings.windowName || jQuery(this).attr("name");
-      var href = jQuery(this).attr("href");
+      settings.windowName = settings.windowName || $(this).attr("name");
+      var href = $(this).attr("href");
       if (!settings.windowURL && !(href == "#") && !(href == "")) {
-        settings.windowURL = jQuery(this).attr("href");
+        settings.windowURL = $(this).attr("href");
       }
 
       var centeredY, centeredX;
@@ -148,8 +157,8 @@ jqueryPopup.defaultSettings = {
     if (typeof event == "undefined") {
       event = "click";
     }
-    object = jQuery(object);
-    if (!(object instanceof jQuery)) {
+    object = $(object);
+    if (!(object instanceof $)) {
       return false;
     }
     object.unbind(event, object.handler);

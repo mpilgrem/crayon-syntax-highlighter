@@ -1,10 +1,17 @@
+/* global CSSJSON, CrayonAdminSettings, CrayonAdminStrings,
+CrayonThemeEditorSettings, CrayonSyntaxAdmin, CrayonThemeEditorStrings,
+CrayonUtil, jQueryCrayon
+*/
+/* exported CrayonSyntaxThemeEditor
+*/
 // Crayon Syntax Highlighter Theme Editor JavaScript
+
+var CrayonSyntaxThemeEditor;
 
 (function($) {
   CrayonSyntaxThemeEditor = new (function() {
     var base = this;
 
-    var crayonSettings = CrayonSyntaxSettings;
     var adminSettings = CrayonAdminSettings;
     var settings = CrayonThemeEditorSettings;
     var strings = CrayonThemeEditorStrings;
@@ -137,7 +144,7 @@
       });
     };
 
-    base.duplicate = function(id, name) {
+    base.duplicate = function(id) {
       base.createPrompt({
         //html: "Are you sure you want to duplicate the '" + name + "' theme?",
         title: strings.duplicate,
@@ -164,7 +171,7 @@
       });
     };
 
-    base.submit = function(id, name) {
+    base.submit = function(id) {
       base.createPrompt({
         title: strings.submit,
         desc: strings.submitText,
@@ -404,7 +411,7 @@
       });
     };
 
-    base.populateAttributes = function($change) {
+    base.populateAttributes = function() {
       var elems = themeJSON.children;
       var root = settings.cssThemePrefix + base.nameToID(themeInfo.name);
       CrayonUtil.log(elems, root);
@@ -413,9 +420,7 @@
           attr,
           elem,
           dataElem,
-          dataAttr,
-          root,
-          elems
+          dataAttr
         ) {
           if (elem) {
             if (dataAttr in elem.attributes) {
@@ -475,75 +480,75 @@
       }
       return css;
     }),
-      (base.getBorderCSS = function(css) {
-        var result = {};
-        var important = base.isImportant(css);
-        $.each(strings.borderStyles, function(i, style) {
-          if (css.indexOf(style) >= 0) {
-            result.style = style;
-          }
-        });
-        var width = /\d+\s*(px|%|em|rem)/gi.exec(css);
-        if (width) {
-          result.width = width[0];
+    (base.getBorderCSS = function(css) {
+      var result = {};
+      var important = base.isImportant(css);
+      $.each(strings.borderStyles, function(i, style) {
+        if (css.indexOf(style) >= 0) {
+          result.style = style;
         }
-        var color = /#\w+/gi.exec(css);
-        if (color) {
-          result.color = color[0];
-        }
-        if (important) {
-          for (var rule in result) {
-            result[rule] = base.addImportant(result[rule]);
-          }
-        }
-        return result;
-      }),
-      (base.createPrompt = function(args) {
-        args = $.extend(
-          {
-            title: adminStrings.prompt,
-            text: adminStrings.value,
-            desc: null,
-            value: "",
-            options: {
-              buttons: {
-                OK: function() {
-                  if (args.ok) {
-                    args.ok(base.getFieldValue("prompt-text"));
-                  }
-                  $(this).crayonDialog("close");
-                },
-                Cancel: function() {
-                  $(this).crayonDialog("close");
-                }
-              },
-              open: function() {
-                base
-                  .getField("prompt-text")
-                  .val(args.value)
-                  .focus();
-              }
-            }
-          },
-          args
-        );
-        args.html =
-          '<table class="field-table crayon-prompt-' +
-          base.nameToID(args.title) +
-          '">';
-        if (args.desc) {
-          args.html += '<tr><td colspan="2">' + args.desc + "</td></tr>";
-        }
-        args.html +=
-          "<tr><td>" +
-          args.text +
-          ":</td><td>" +
-          base.createInput("prompt-text") +
-          "</td></tr>";
-        args.html += "</table>";
-        var options = { width: "400px" };
-        admin.createDialog(args, options);
       });
+      var width = /\d+\s*(px|%|em|rem)/gi.exec(css);
+      if (width) {
+        result.width = width[0];
+      }
+      var color = /#\w+/gi.exec(css);
+      if (color) {
+        result.color = color[0];
+      }
+      if (important) {
+        for (var rule in result) {
+          result[rule] = base.addImportant(result[rule]);
+        }
+      }
+      return result;
+    }),
+    (base.createPrompt = function(args) {
+      args = $.extend(
+        {
+          title: adminStrings.prompt,
+          text: adminStrings.value,
+          desc: null,
+          value: "",
+          options: {
+            buttons: {
+              OK: function() {
+                if (args.ok) {
+                  args.ok(base.getFieldValue("prompt-text"));
+                }
+                $(this).crayonDialog("close");
+              },
+              Cancel: function() {
+                $(this).crayonDialog("close");
+              }
+            },
+            open: function() {
+              base
+                .getField("prompt-text")
+                .val(args.value)
+                .focus();
+            }
+          }
+        },
+        args
+      );
+      args.html =
+        '<table class="field-table crayon-prompt-' +
+        base.nameToID(args.title) +
+        '">';
+      if (args.desc) {
+        args.html += '<tr><td colspan="2">' + args.desc + "</td></tr>";
+      }
+      args.html +=
+        "<tr><td>" +
+        args.text +
+        ":</td><td>" +
+        base.createInput("prompt-text") +
+        "</td></tr>";
+      args.html += "</table>";
+      var options = { width: "400px" };
+      admin.createDialog(args, options);
+    });
 
     base.initUI = function() {
       // Bind events
@@ -578,7 +583,7 @@
             showNoneButton: true,
             colorFormat: "#HEX"
           };
-          args.open = function(e, color) {
+          args.open = function() {
             $(".ui-colorpicker-dialog .ui-button").addClass("button-primary");
             if (colorPickerPos) {
               var picker = $(".ui-colorpicker-dialog:visible");
@@ -586,10 +591,10 @@
               //                            picker.css('top', colorPickerPos.top);
             }
           };
-          args.select = function(e, color) {
+          args.select = function() {
             attr.trigger("change");
           };
-          args.close = function(e, color) {
+          args.close = function() {
             attr.trigger("change");
           };
           attr.colorpicker(args);

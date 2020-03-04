@@ -1,14 +1,14 @@
+/* global CrayonTagEditor, CrayonTagEditorSettings, CrayonTinyMCE,
+jQueryCrayon, switchEditors, tinymce
+ */
 (function($) {
   window.CrayonTinyMCE = new (function() {
     // TinyMCE specific
     var name = "crayon_tinymce";
     var s,
       te = null;
-    var isHighlighted = false;
     var currPre = null;
     var isInit = false;
-    // Switch events
-    var switch_html_click = (switch_tmce_click = null);
 
     var base = this;
     //	var wasHighlighted = false;
@@ -17,7 +17,6 @@
       $(s.tinymce_button)
         .closest(s.tinymce_button_generic)
         .toggleClass(s.tinymce_highlight, highlight);
-      isHighlighted = highlight;
     };
 
     base.selectPreCSS = function(selected) {
@@ -167,7 +166,7 @@
             }
           });
 
-          ed.onInit.add(function(ed) {
+          ed.onInit.add(function() {
             CrayonTagEditor.bind(s.tinymce_button);
           });
 
@@ -203,7 +202,7 @@
           });
 
           // Highlight selected
-          ed.onNodeChange.add(function(ed, cm, n, co) {
+          ed.onNodeChange.add(function(ed, cm, n) {
             if (n != currPre) {
               // We only care if we select another same object
               if (currPre) {
@@ -242,7 +241,7 @@
             cmd: "showCrayon"
           });
         },
-        createControl: function(n, cm) {
+        createControl: function() {
           return null;
         },
         getInfo: function() {

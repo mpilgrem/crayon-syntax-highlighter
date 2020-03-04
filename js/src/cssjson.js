@@ -1,3 +1,6 @@
+/* exported CSSJSON
+ */
+
 /**
  * CSS-JSON Converter for JavaScript, v.2.0 By Aram Kocharyan, http://aramk.com/
  * Converts CSS to JSON and back.
@@ -18,15 +21,12 @@ var CSSJSON = new (function() {
   };
   base.init();
 
-  var selX = /([^\s\;\{\}][^\;\{\}]*)\{/g;
-  var endX = /\}/g;
-  var lineX = /([^\;\{\}]*)\;/g;
   var commentX = /\/\*[\s\S]*?\*\//g;
-  var lineAttrX = /([^\:]+):([^\;]*);/;
+  var lineAttrX = /([^:]+):([^;]*);/;
 
   // This is used, a concatenation of all above. We use alternation to
   // capture.
-  var altX = /(\/\*[\s\S]*?\*\/)|([^\s\;\{\}][^\;\{\}]*(?=\{))|(\})|([^\;\{\}]+\;(?!\s*\*\/))/gim;
+  var altX = /(\/\*[\s\S]*?\*\/)|([^\s;{}][^;{}]*(?=\{))|(\})|([^;{}]+;(?!\s*\*\/))/gim;
 
   // Capture groups
   var capComment = 1;
@@ -58,9 +58,10 @@ var CSSJSON = new (function() {
     };
     var match = null;
     var count = 0;
+    var name;
 
     if (typeof args == "undefined") {
-      var args = {
+      args = {
         ordered: false,
         comments: false,
         stripComments: false,
@@ -79,26 +80,23 @@ var CSSJSON = new (function() {
         node[count++] = add;
       } else if (!isEmpty(match[capSelector])) {
         // New node, we recurse
-        var name = match[capSelector].trim();
+        name = match[capSelector].trim();
         // This will return when we encounter a closing brace
         var newNode = base.toJSON(cssString, args);
         if (args.ordered) {
-          var obj = {};
-          obj["name"] = name;
-          obj["value"] = newNode;
           // Since we must use key as index to keep order and not
           // name, this will differentiate between a Rule Node and an
           // Attribute, since both contain a name and value pair.
-          obj["type"] = "rule";
-          node[count++] = obj;
+          node[count++] = { name: name, value: newNode, type: "rule" };
         } else {
+          var bits;
           if (args.split) {
-            var bits = name.split(",");
+            bits = name.split(",");
           } else {
-            var bits = [name];
+            bits = [name];
           }
-          for (i in bits) {
-            var sel = bits[i].trim();
+          bits.forEach(bit => {
+            var sel = bit.trim();
             if (sel in node.children) {
               for (var att in newNode.attributes) {
                 node.children[sel].attributes[att] = newNode.attributes[att];
@@ -106,7 +104,7 @@ var CSSJSON = new (function() {
             } else {
               node.children[sel] = newNode;
             }
-          }
+          });
         }
       } else if (!isEmpty(match[capEnd])) {
         // Node has finished
@@ -116,14 +114,10 @@ var CSSJSON = new (function() {
         var attr = lineAttrX.exec(line);
         if (attr) {
           // Attribute
-          var name = attr[1].trim();
+          name = attr[1].trim();
           var value = attr[2].trim();
           if (args.ordered) {
-            var obj = {};
-            obj["name"] = name;
-            obj["value"] = value;
-            obj["type"] = "attr";
-            node[count++] = obj;
+            node[count++] = {name: name, value: value, type: "attr"};
           } else {
             node.attributes[name] = value;
           }
@@ -148,6 +142,7 @@ var CSSJSON = new (function() {
    */
   base.toCSS = function(node, depth, breaks) {
     var cssString = "";
+    var i;
     if (typeof depth == "undefined") {
       depth = 0;
     }

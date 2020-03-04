@@ -1,4 +1,6 @@
-// A self-invoking function expression
+/* global CrayonSyntaxSettings, CrayonTagEditorSettings, CrayonUtil,
+jQueryCrayon, wp
+*/
 (function($, wp) {
   var CRAYON_INLINE_CSS = CrayonTagEditorSettings.inline_css;
   var el = wp.element.createElement;
@@ -67,13 +69,16 @@
     return el(wp.editor.RichTextToolbarButton, {
       icon: "editor-code",
       title: "Crayon",
-      onClick: function(onClickArg) {
+      onClick: function() {
         var activeFormat = wp.richText.getActiveFormat(
           props.value,
           "crayon-syntax-highlighter/code-inline"
         );
         var startIndex = props.value.start;
         var endIndex = props.value.end;
+        var inputRichTextValue;
+        var inputValue;
+        var inputNode;
         if (activeFormat) {
           var findFormat = function(formats) {
             var isFormat = function(el) {
@@ -89,22 +94,22 @@
           while (findFormat(props.value.formats[endIndex])) {
             endIndex++;
           }
-          var inputRichTextValue = wp.richText.slice(
+          inputRichTextValue = wp.richText.slice(
             props.value,
             startIndex,
             endIndex
           );
-          var inputValue = wp.richText.toHTMLString({
+          inputValue = wp.richText.toHTMLString({
             value: inputRichTextValue
           });
-          var inputNode = CrayonUtil.htmlToFirstNode(inputValue);
+          inputNode = CrayonUtil.htmlToFirstNode(inputValue);
         } else {
-          var inputRichTextValue = wp.richText.slice(
+          inputRichTextValue = wp.richText.slice(
             props.value,
             startIndex,
             endIndex
           );
-          var inputValue =
+          inputValue =
             '<span class="' +
             CRAYON_INLINE_CSS +
             '">' +
@@ -112,7 +117,7 @@
               value: inputRichTextValue
             }) +
             "</span>";
-          var inputNode = CrayonUtil.htmlToFirstNode(inputValue);
+          inputNode = CrayonUtil.htmlToFirstNode(inputValue);
         }
         window.CrayonTagEditor.showDialog({
           node: inputNode,
@@ -405,11 +410,10 @@
           // Retain all other classes, remove settings
           currClasses = $.trim(currClasses.replace(re, ""));
           var atts = {};
-          for (var i in matches) {
-            var id = matches[i][1];
-            var value = matches[i][2];
-            atts[id] = value;
-          }
+          matches.forEach(match => {
+            var id = match[1];
+            atts[id] = match[2];
+          });
 
           // Title
           var title = currCrayon.attr("title");
@@ -425,7 +429,7 @@
 
           // Inverted settings
           if (typeof atts["highlight"] != "undefined") {
-            atts["highlight"] = "0" ? "1" : "0";
+            atts["highlight"] = atts["highlight"] == "0" ? "1" : "0";
           }
 
           // Inline
@@ -460,7 +464,7 @@
             if (!setting.hasClass(gs.special)) {
               setting.addClass(gs.changed);
               if (setting.is("input[type=checkbox]")) {
-                highlight = setting.next("span");
+                var highlight = setting.next("span");
                 highlight.addClass(gs.changed);
               }
             }
@@ -501,27 +505,18 @@
         var inline_single = $("." + s.inline_hide_only_css);
         var disabled = [s.mark_css, s.range_css, s.title_css, s.url_css];
 
-        for (var i in disabled) {
-          var obj = $(disabled[i]);
-          obj.attr("disabled", is_inline);
-        }
+        disabled.forEach(e => $(e).attr("disabled", is_inline));
 
         if (is_inline) {
           inline_hide.hide();
           inline_single.hide();
           inline_hide.closest("tr").hide();
-          for (var i in disabled) {
-            var obj = $(disabled[i]);
-            obj.addClass("crayon-disabled");
-          }
+          disabled.forEach(e => $(e).addClass("crayon-disabled"));
         } else {
           inline_hide.show();
           inline_single.show();
           inline_hide.closest("tr").show();
-          for (var i in disabled) {
-            var obj = $(disabled[i]);
-            obj.removeClass("crayon-disabled");
-          }
+          disabled.forEach(e => $(e).removeClass("crayon-disabled"));
         }
       });
       inline.change();
@@ -571,7 +566,8 @@
 
     // XXX Add Crayon to editor
     base.addCrayon = function() {
-      var url = $(s.url_css);
+      var url;
+      url = $(s.url_css);
       if (url.val().length == 0 && code.val().length == 0) {
         code.addClass(gs.selected);
         code.focus();
@@ -584,7 +580,8 @@
       is_inline = inline.length != 0 && inline.is(":checked");
 
       // Spacing only for <pre>
-      var br_before = (br_after = "");
+      var br_before = "";
+      var br_after = "";
       if (!editing) {
         // Don't add spaces if editing
         if (!is_inline) {
@@ -672,7 +669,7 @@
           shortcode += 'title="' + title + '" ';
         }
         // URL
-        var url = $(s.url_css).val();
+        url = $(s.url_css).val();
         if (url.length != 0) {
           shortcode += 'data-url="' + url + '" ';
         }
@@ -763,12 +760,11 @@
 
     base.validate = function(atts) {
       var fields = ["range", "mark"];
-      for (var i in fields) {
-        var field = fields[i];
+      fields.forEach(field => {
         if (typeof atts[field] != "undefined") {
           atts[field] = atts[field].replace(/\s/g, "");
         }
-      }
+      });
       return atts;
     };
 

@@ -1,3 +1,7 @@
+/* global CrayonAdminSettings, CrayonAdminStrings, CrayonSyntax,
+CrayonSyntaxAdmin, CrayonSyntaxSettings, CrayonSyntaxThemeEditor,
+CrayonThemeEditorStrings, CrayonUtil, jQueryCrayon
+*/
 // Crayon Syntax Highlighter Admin JavaScript
 
 (function($) {
@@ -11,7 +15,6 @@
       preview_info,
       preview_cbox,
       preview_delay_timer,
-      preview_get,
       preview_loaded;
     // The DOM object ids that trigger a preview update
     var preview_obj_names = [];
@@ -43,7 +46,8 @@
       theme_editor_duplicate_button,
       theme_editor_delete_button,
       theme_editor_submit_button;
-    var theme_select, theme_info, theme_ver, theme_author, theme_desc;
+    var theme_select;
+    var theme_info;
 
     var settings = null;
     var strings = null;
@@ -69,9 +73,6 @@
       // Themes
       theme_select = $("#crayon-theme");
       theme_info = $("#crayon-theme-info");
-      theme_ver = theme_info.find(".version").next("div");
-      theme_author = theme_info.find(".author").next("div");
-      theme_desc = theme_info.find(".desc");
       base.show_theme_info();
       theme_select.change(function() {
         base.show_theme_info();
@@ -443,9 +444,6 @@
         .attr("data-value");
       adminSettings.currThemeIsUser =
         adminSettings.currTheme in adminSettings.userThemes;
-      var url = adminSettings.currThemeIsUser
-        ? adminSettings.userThemesURL
-        : adminSettings.themesURL;
       adminSettings.currThemeURL = base.get_theme_url(adminSettings.currTheme);
       // Load the theme file
 
@@ -477,7 +475,7 @@
           adminSettings.currThemeCSS
         );
         var infoHTML = "";
-        for (id in info) {
+        for (var id in info) {
           if (id != "name") {
             infoHTML += '<div class="fieldset">';
             if (id != "description") {
@@ -591,7 +589,7 @@
         title: strings.confirm
       };
       args = $.extend(defaultArgs, args);
-      var options = $.extend(
+      options = $.extend(
         {
           modal: true,
           title: args.title,
@@ -602,7 +600,7 @@
           buttons: {},
           dialogClass: "wp-dialog",
           selectedButtonIndex: 1, // starts from 1
-          close: function(event, ui) {
+          close: function() {
             $(this).remove();
           }
         },

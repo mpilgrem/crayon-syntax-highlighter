@@ -1,4 +1,10 @@
+/* global CrayonSyntaxStrings, CrayonUtil, jQueryCrayon, popupWindow
+*/
+/* exported CrayonSyntax
+*/
 // Crayon Syntax Highlighter JavaScript
+
+var CrayonSyntax;
 
 (function($) {
   // BEGIN AUXILIARY FUNCTIONS
@@ -51,13 +57,11 @@
   var CRAYON_PLAIN = ".crayon-plain";
   var CRAYON_MAIN = ".crayon-main";
   var CRAYON_TABLE = ".crayon-table";
-  var CRAYON_LOADING = ".crayon-loading";
   var CRAYON_CODE = ".crayon-code";
   var CRAYON_TITLE = ".crayon-title";
   var CRAYON_TOOLS = ".crayon-tools";
   var CRAYON_NUMS = ".crayon-nums";
   var CRAYON_NUM = ".crayon-num";
-  var CRAYON_LINE = ".crayon-line";
   var CRAYON_WRAPPED = "crayon-wrapped";
   var CRAYON_NUMS_CONTENT = ".crayon-nums-content";
   var CRAYON_NUMS_BUTTON = ".crayon-nums-button";
@@ -72,7 +76,6 @@
   CrayonSyntax = new (function() {
     var base = this;
     var crayons = new Object();
-    var settings;
     var strings;
     var currUID = 0;
     var touchscreen;
@@ -81,7 +84,6 @@
       if (typeof crayons == "undefined") {
         crayons = new Object();
       }
-      settings = CrayonSyntaxSettings;
       strings = CrayonSyntaxStrings;
       $(CRAYON_SYNTAX).each(function() {
         base.process(this);
@@ -529,12 +531,10 @@
       return css_str;
     };
 
-    base.copyPlain = function(uid, hover) {
+    base.copyPlain = function(uid) {
       if (typeof crayons[uid] == "undefined") {
         return makeUID(uid);
       }
-
-      var plain = crayons[uid].plain;
 
       base.togglePlain(uid, true, true);
       toggleToolbar(uid, true);
@@ -581,7 +581,7 @@
         var buttons = $(".crayon-button-icon", crayons[uid].toolbar);
         buttons.each(function() {
           var lowres = $(this).css("background-image");
-          var highres = lowres.replace(/\.(?=[^\.]+$)/g, "@2x.");
+          var highres = lowres.replace(/\.(?=[^.]+$)/g, "@2x.");
           $(this).css("background-size", "48px 128px");
           $(this).css("background-image", highres);
         });
@@ -841,13 +841,6 @@
       }, 200);
     };
 
-    var fixTableWidth = function(uid) {
-      if (typeof crayons[uid] == "undefined") {
-        makeUID(uid);
-        return false;
-      }
-    };
-
     // Convert '-10px' to -10
     var pxToInt = function(pixels) {
       if (typeof pixels != "string") {
@@ -1026,7 +1019,7 @@
       }
 
       var main = crayons[uid].main;
-      var plain = crayons[uid].plain;
+      var newSize;
 
       if (expand) {
         if (typeof crayons[uid].expanded == "undefined") {
@@ -1062,7 +1055,7 @@
           "min-width": "none",
           "max-width": "none"
         });
-        var newSize = {
+        newSize = {
           width: crayons[uid].finalOuterSize.width
         };
         if (!crayons[uid].mainHeightAuto && !crayons[uid].hasOneLine) {
@@ -1095,7 +1088,7 @@
           if (!crayons[uid].expanded) {
             crayons[uid].delay(delay);
           }
-          var newSize = {
+          newSize = {
             width: initialSize.width
           };
           if (!crayons[uid].mainHeightAuto && !crayons[uid].hasOneLine) {
@@ -1126,7 +1119,7 @@
     };
 
     var placeholderResize = function() {
-      for (uid in crayons) {
+      for (var uid in crayons) {
         if (crayons[uid].hasClass(CRAYON_EXPANDED)) {
           crayons[uid].css(crayons[uid].placeholder.offset());
         }
@@ -1158,7 +1151,7 @@
         main.css("overflow", "auto");
         plain.css("overflow", "auto");
         if (typeof crayons[uid].top != "undefined") {
-          visible = main.css("z-index") == 1 ? main : plain;
+          var visible = main.css("z-index") == 1 ? main : plain;
           // Browser will not render until scrollbar moves, move it manually
           visible.scrollTop(crayons[uid].top - 1);
           visible.scrollTop(crayons[uid].top);

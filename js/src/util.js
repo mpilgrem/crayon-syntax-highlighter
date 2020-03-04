@@ -1,5 +1,8 @@
+/* global CrayonSyntaxSettings, jQuery, tinycolor
+ */
 // To avoid duplicates conflicting
 var jQueryCrayon = jQuery;
+var CrayonUtil;
 
 (function($) {
   CrayonUtil = new (function() {
@@ -86,7 +89,7 @@ var jQueryCrayon = jQuery;
     };
 
     /**
-     * @param {String} HTML representing any number of sibling elements
+     * @param {String} html representing any number of sibling elements
      * @return {NodeList}
      */
     base.htmlToElements = function(html) {
@@ -245,15 +248,15 @@ var jQueryCrayon = jQuery;
   // Prototype modifications
 
   RegExp.prototype.execAll = function(string) {
+    var match;
+    var matchArray = [];
     var matches = [];
-    var match = null;
-    while ((match = this.exec(string)) != null) {
-      var matchArray = [];
-      for (var i in match) {
-        if (parseInt(i) == i) {
-          matchArray.push(match[i]);
+    if ((match = this.exec(string))) {
+      match.forEach((value, key) => {
+        if (parseInt(key) == key) {
+          matchArray.push(value);
         }
-      }
+      });
       matches.push(matchArray);
     }
     return matches;

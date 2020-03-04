@@ -1,3 +1,6 @@
+/* global CrayonQuickTags, CrayonTagEditor, CrayonTagEditorSettings, QTags,
+jQueryCrayon
+*/
 (function($) {
   var settings = CrayonTagEditorSettings;
 
