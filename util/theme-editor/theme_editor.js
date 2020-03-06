@@ -581,21 +581,20 @@ var CrayonSyntaxThemeEditor;
           var args = {
             parts: "full",
             showNoneButton: true,
-            colorFormat: "#HEX"
-          };
-          args.open = function() {
-            $(".ui-colorpicker-dialog .ui-button").addClass("button-primary");
-            if (colorPickerPos) {
-              var picker = $(".ui-colorpicker-dialog:visible");
-              picker.css("left", colorPickerPos.left);
-              //                            picker.css('top', colorPickerPos.top);
+            colorFormat: "#HEX",
+            open: function() {
+              $(".ui-colorpicker-dialog .ui-button").addClass("button-primary");
+              if (colorPickerPos) {
+                var picker = $(".ui-colorpicker-dialog:visible");
+                picker.css("left", colorPickerPos.left);
+              }
+            },
+            close: function() {
+              attr.trigger("change");
+            },
+            select: function() {
+              attr.trigger("change");
             }
-          };
-          args.select = function() {
-            attr.trigger("change");
-          };
-          args.close = function() {
-            attr.trigger("change");
           };
           attr.colorpicker(args);
           attr.bind("change", function() {
@@ -712,7 +711,6 @@ var CrayonSyntaxThemeEditor;
       admin.preview_update();
       admin.show_theme_info();
       admin.show_main();
-      //preview.html('');
     };
 
     base.updateTitle = function() {
